@@ -1,19 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { MessageInputProps } from '../types';
 
 const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, darkMode }) => {
   const [message, setMessage] = useState<string>('');
+  
+  console.log('MessageInput renderizado. onSendMessage:', typeof onSendMessage);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    onSendMessage(message);
-    setMessage('');
-  };
+    console.log('Enviando mensagem (submit):', message);
+    console.log('Função onSendMessage:', onSendMessage);
+    
+    if (message.trim()) {
+      console.log('Chamando onSendMessage com:', message.trim());
+      try {
+        onSendMessage(message.trim());
+        console.log('Mensagem enviada com sucesso');
+        setMessage('');
+      } catch (error) {
+        console.error('Erro ao enviar mensagem:', error);
+      }
+    } else {
+      console.log('Mensagem vazia, não enviando');
+    }
+  }, [message, onSendMessage]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log('Tecla pressionada:', e.key);
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      console.log('Enter pressionado, mensagem:', message);
+      if (message.trim()) {
+        console.log('Enviando mensagem com Enter (trimmed):', message.trim());
+        try {
+          onSendMessage(message.trim());
+          console.log('Mensagem enviada com sucesso (Enter)');
+          setMessage('');
+        } catch (error) {
+          console.error('Erro ao enviar mensagem (Enter):', error);
+        }
+      } else {
+        console.log('Mensagem vazia ao pressionar Enter');
+      }
+    }
+  }, [message, onSendMessage]);
+
+  console.log('MessageInput renderizando. Mensagem atual:', message);
 
   return (
-    <div className="border-t border-gray-200 dark:border-[#404040] bg-white dark:bg-[#303030] px-4 py-3" style={{marginBottom: '16px', backgroundColor: 'transparent'}}> 
+    <div className="px-4 py-3 bg-gray-50 dark:bg-[#212121]" style={{marginBottom: '16px'}}>
       <form 
-        onSubmit={handleSubmit} 
+        onSubmit={(e) => {
+          console.log('Formulário submetido');
+          handleSubmit(e);
+        }} 
         className="max-w-4xl mx-auto"
       >
         <div className="relative flex items-center">
@@ -21,10 +61,18 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, darkMode }) 
             <input
               type="text"
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => {
+                console.log('Mensagem alterada para:', e.target.value);
+                setMessage(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                console.log('Tecla pressionada:', e.key);
+                handleKeyDown(e);
+              }}
               placeholder="Digite sua mensagem..."
-              className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-[#505050] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-[#404040] text-gray-900 dark:text-[#e5e5e5] placeholder-gray-500 dark:placeholder-gray-400"
+              className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-[#404040] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-[#212121] text-gray-900 dark:text-[#e5e5e5] placeholder-gray-500 dark:placeholder-gray-400"
               aria-label="Digite sua mensagem"
+              autoComplete="off"
             />
           </div>
           <button

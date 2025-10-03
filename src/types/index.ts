@@ -15,6 +15,7 @@ export interface MenuItem {
   icon: React.ReactNode;
   label: string;
   active: boolean;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 export interface SocialLink {

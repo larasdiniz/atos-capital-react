@@ -56,13 +56,19 @@ const subcategoriasPorGenero: Record<string, Array<{name: string, value: number}
   ],
 };
 
+<<<<<<< HEAD
 // Cores para os gráficos baseadas no tema
 const getChartColors = (theme: 'light' | 'dark') => ({
+=======
+// Cores fixas para o tema claro
+const getChartColors = () => ({
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
   pie: ['#FFC300', '#3498DB', '#A569BD', '#E74C3C', '#1ABC9C'],
   bar: ['#4A90E2', '#50E3C2', '#9013FE'],
   line: '#5D3FD3',
   scatter: '#E74C3C',
   areaGradient: {
+<<<<<<< HEAD
     start: theme === 'dark' ? 'rgba(93, 63, 211, 0.8)' : 'rgba(93, 63, 211, 0.4)',
     end: theme === 'dark' ? 'rgba(93, 63, 211, 0.1)' : 'rgba(93, 63, 211, 0.05)'
   },
@@ -73,6 +79,18 @@ const getChartColors = (theme: 'light' | 'dark') => ({
   },
   legend: {
     text: theme === 'dark' ? '#e5e7eb' : '#4b5563',
+=======
+    start: 'rgba(93, 63, 211, 0.4)',
+    end: 'rgba(93, 63, 211, 0.05)'
+  },
+  tooltip: {
+    background: '#ffffff',
+    border: '#e5e7eb',
+    text: '#1f2937',
+  },
+  legend: {
+    text: '#4b5563',
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
   },
 });
 
@@ -203,6 +221,7 @@ const chartTypes = ['pie', 'line', 'bar', 'scatter'];
 
 type MockedChartProps = {
   chartType?: 'pie' | 'line' | 'bar' | 'scatter';
+<<<<<<< HEAD
   theme?: 'light' | 'dark' | 'system';
 };
 
@@ -247,6 +266,23 @@ const MockedChart: React.FC<MockedChartProps> = ({
   };
 
   const chartColors = getChartColors(currentTheme);
+=======
+};
+
+const MockedChart: React.FC<MockedChartProps> = ({ 
+  chartType: requestedChartType
+}) => {
+  // Theme colors for light mode
+  const themeColors = {
+    background: '#ffffff',
+    text: '#1f2937',
+    grid: '#e5e7eb',
+    card: '#f9fafb',
+  };
+
+  // Get chart colors (always light theme)
+  const chartColors = getChartColors();
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
 
   // Estados para controlar o drill-down
   const [drillDownData, setDrillDownData] = useState<{vendedor: string, data: {name: string, value: number}[]} | null>(null);
@@ -272,7 +308,17 @@ const MockedChart: React.FC<MockedChartProps> = ({
   const [filtroValorMax, setFiltroValorMax] = useState<number>(valoresIniciais.max);
   const [showFiltrosAvancados, setShowFiltrosAvancados] = useState<boolean>(false);
   
+<<<<<<< HEAD
   // Filtrar dados com base nos filtros
+=======
+  // Set light theme colors for chart elements
+  const chartBackground = themeColors.background;
+  const textColor = themeColors.text;
+  const gridColor = themeColors.grid;
+  const cardBackground = themeColors.card;
+  
+  // Filter data based on filters
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
   const barDataFiltrada = useMemo(() => {
     console.log('Filtrando com valores:', { filtroValorMin, filtroValorMax, filtrosMeses });
     
@@ -535,9 +581,15 @@ const MockedChart: React.FC<MockedChartProps> = ({
     }
   };
   
+<<<<<<< HEAD
   // Componente do botão de exportação
   const ExportButton = () => (
     <div className="export-button absolute -top-2 -right-2 z-50 flex flex-col space-y-2 p-1 bg-white/80 dark:bg-gray-800/80 rounded-lg shadow-lg">
+=======
+  // Export buttons with proper z-index to stay below settings menu
+  const ExportButton = () => (
+    <div className="export-buttons absolute -top-2 -right-2 z-10 flex flex-col space-y-2 p-1 bg-white/80 dark:bg-gray-800/80 rounded-lg shadow-lg" style={{ zIndex: 10 }}>
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
       <button
         onClick={(e) => {
           e.stopPropagation();
@@ -605,9 +657,15 @@ const MockedChart: React.FC<MockedChartProps> = ({
   return (
     <div>
       {chartType === 'pie' && !drillDownPie && (
+<<<<<<< HEAD
         <div ref={chartRef} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
           <ExportButton />
           <h3 className="text-sm font-semibold mb-2 text-black">Distribuição por Gênero Principal</h3>
+=======
+        <div ref={chartRef} className="bg-white rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
+          <ExportButton />
+          <h3 className="text-sm font-semibold mb-2 text-black">Relação entre Investimento e Retorno</h3>
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
           <PieChart width={500} height={300}>
             <Pie
               data={pieData}
@@ -659,12 +717,20 @@ const MockedChart: React.FC<MockedChartProps> = ({
       )}
 
       {chartType === 'pie' && drillDownPie && (
+<<<<<<< HEAD
         <div ref={chartRef} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
+=======
+        <div ref={chartRef} className="bg-white rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
           <ExportButton />
           <div className="flex items-center mb-4">
             <button 
               onClick={handleBackToPie}
+<<<<<<< HEAD
               className="p-1 mr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+=======
+              className="p-1 mr-2 rounded-full hover:bg-gray-100"
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
               aria-label="Voltar para o gráfico de pizza"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -683,11 +749,19 @@ const MockedChart: React.FC<MockedChartProps> = ({
               horizontal={true} 
               vertical={false}
               strokeDasharray="3 3" 
+<<<<<<< HEAD
               stroke={currentTheme === 'dark' ? '#374151' : '#e5e7eb'} 
             />
             <XAxis 
               dataKey="name" 
               tick={{ fill: '#000000', fontSize: 10, fontWeight: 500, textAnchor: 'end' }}
+=======
+              stroke="#e5e7eb" 
+            />
+            <XAxis 
+              dataKey="name" 
+              tick={{ fill: '#4b5563', fontSize: 10, fontWeight: 500, textAnchor: 'end' }}
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
               tickLine={false}
               height={60}
               interval={0}
@@ -706,6 +780,7 @@ const MockedChart: React.FC<MockedChartProps> = ({
               formatter={(value: number) => [`${value.toFixed(1)}%`, 'Porcentagem']}
               labelFormatter={(label) => `Categoria: ${label}`}
               contentStyle={{
+<<<<<<< HEAD
                 backgroundColor: currentTheme === 'dark' ? '#1f2937' : '#ffffff',
                 borderColor: currentTheme === 'dark' ? '#374151' : '#e5e7eb',
                 borderRadius: '0.5rem',
@@ -713,6 +788,15 @@ const MockedChart: React.FC<MockedChartProps> = ({
               }}
               itemStyle={{ color: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937' }}
               labelStyle={{ color: currentTheme === 'dark' ? '#9ca3af' : '#6b7280' }}
+=======
+                backgroundColor: '#ffffff',
+                borderColor: '#e5e7eb',
+                borderRadius: '0.5rem',
+                padding: '0.5rem',
+              }}
+              itemStyle={{ color: '#1f2937' }}
+              labelStyle={{ color: '#6b7280' }}
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
             />
             <Bar dataKey="value" name="Porcentagem">
               {drillDownPie.data.map((entry, index) => (
@@ -726,7 +810,11 @@ const MockedChart: React.FC<MockedChartProps> = ({
             <Legend 
               wrapperStyle={{
                 paddingTop: '20px',
+<<<<<<< HEAD
                 color: currentTheme === 'dark' ? '#e5e7eb' : '#4b5563',
+=======
+                color: '#4b5563',
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
               }}
             />
           </BarChart>
@@ -737,7 +825,11 @@ const MockedChart: React.FC<MockedChartProps> = ({
       )}
 
       {chartType === 'line' && (
+<<<<<<< HEAD
         <div ref={chartRef} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
+=======
+        <div ref={chartRef} className="bg-white rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
           <ExportButton />
           <LineChart width={500} height={300} data={lineData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <defs>
@@ -758,7 +850,11 @@ const MockedChart: React.FC<MockedChartProps> = ({
       )}
 
       {chartType === 'bar' && !drillDownData && (
+<<<<<<< HEAD
         <div ref={chartRef} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
+=======
+        <div ref={chartRef} className="bg-white rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
           <ExportButton />
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-sm font-semibold text-black">Vendas por Vendedor</h3>
@@ -770,7 +866,11 @@ const MockedChart: React.FC<MockedChartProps> = ({
           {!showFiltrosAvancados && (
             <div className="flex flex-wrap justify-center gap-3 mb-4">
               {mesesDisponiveis.map((mes) => (
+<<<<<<< HEAD
                 <label key={mes} className="flex items-center space-x-1.5 px-3 py-1.5 bg-gray-50 dark:bg-gray-700 rounded-full">
+=======
+                <label key={mes} className="flex items-center space-x-1.5 px-3 py-1.5 bg-gray-50 rounded-full">
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
                   <input
                     type="checkbox"
                     checked={filtrosMeses[mes]}
@@ -778,7 +878,11 @@ const MockedChart: React.FC<MockedChartProps> = ({
                     className="h-3.5 w-3.5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     aria-label={`Filtrar ${mes}`}
                   />
+<<<<<<< HEAD
                   <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+=======
+                  <span className="text-xs font-medium text-gray-700">
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
                     {mes.charAt(0).toUpperCase() + mes.slice(1)}
                   </span>
                 </label>
@@ -800,7 +904,11 @@ const MockedChart: React.FC<MockedChartProps> = ({
                   horizontal={true}
                   vertical={false}
                   strokeDasharray="3 3" 
+<<<<<<< HEAD
                   stroke={currentTheme === 'dark' ? '#374151' : '#e5e7eb'}
+=======
+                  stroke="#e5e7eb"
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
                 />
                 <XAxis 
                   dataKey="name" 
@@ -814,12 +922,20 @@ const MockedChart: React.FC<MockedChartProps> = ({
                 />
                 <Tooltip 
                   content={<CustomBarTooltip />} 
+<<<<<<< HEAD
                   cursor={{ fill: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)' }} 
+=======
+                  cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }} 
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
                 />
                 <Legend 
                   wrapperStyle={{
                     paddingTop: '20px',
+<<<<<<< HEAD
                     color: currentTheme === 'dark' ? '#e5e7eb' : '#4b5563',
+=======
+                    color: '#4b5563',
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
                   }}
                 />
                 {filtrosMeses.jan && (
@@ -861,26 +977,42 @@ const MockedChart: React.FC<MockedChartProps> = ({
               </BarChart>
             </div>
           ) : (
+<<<<<<< HEAD
             <div className="flex flex-col items-center justify-center h-48 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+=======
+            <div className="flex flex-col items-center justify-center h-48 bg-gray-50 rounded-lg p-4 text-center">
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
               {!mesesAtivos ? (
                 <>
                   <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
+<<<<<<< HEAD
                   <p className="text-gray-500 dark:text-gray-400">Selecione pelo menos um mês para visualizar o gráfico.</p>
+=======
+                  <p className="text-gray-500">Selecione pelo menos um mês para visualizar o gráfico.</p>
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
                 </>
               ) : (
                 <>
                   <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
+<<<<<<< HEAD
                   <p className="text-gray-500 dark:text-gray-400">Nenhum dado encontrado com os filtros atuais.</p>
+=======
+                  <p className="text-gray-500">Nenhum dado encontrado com os filtros atuais.</p>
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
                   <button 
                     onClick={() => {
                       setFiltroValorMin(valorMinimo);
                       setFiltroValorMax(valorMaximo);
                     }}
+<<<<<<< HEAD
                     className="mt-2 text-sm text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+=======
+                    className="mt-2 text-sm text-indigo-600 hover:text-indigo-800"
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
                   >
                     Limpar filtros
                   </button>
@@ -906,12 +1038,20 @@ const MockedChart: React.FC<MockedChartProps> = ({
       )}
 
       {chartType === 'bar' && drillDownData && (
+<<<<<<< HEAD
         <div ref={chartRef} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
+=======
+        <div ref={chartRef} className="bg-white rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
           <ExportButton />
           <div className="flex items-center mb-4">
             <button 
               onClick={handleBackToBars}
+<<<<<<< HEAD
               className="p-1 mr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+=======
+              className="p-1 mr-2 rounded-full hover:bg-gray-100"
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
               aria-label="Voltar para o gráfico de colunas"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -926,10 +1066,17 @@ const MockedChart: React.FC<MockedChartProps> = ({
             data={drillDownData.data}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
+<<<<<<< HEAD
             <CartesianGrid strokeDasharray="3 3" stroke={currentTheme === 'dark' ? '#374151' : '#e5e7eb'} />
             <XAxis 
               dataKey="name" 
               tick={{ fill: currentTheme === 'dark' ? '#e5e7eb' : '#4b5563', fontSize: 12 }}
+=======
+            <CartesianGrid stroke="#e5e7eb" />
+            <XAxis 
+              dataKey="name" 
+              tick={{ fill: '#4b5563', fontSize: 12 }}
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
               tickLine={false}
               tickFormatter={(value) => {
                 const meses: {[key: string]: string} = {
@@ -949,6 +1096,7 @@ const MockedChart: React.FC<MockedChartProps> = ({
               formatter={(value: number) => [`${value}%`, 'Porcentagem']}
               labelFormatter={(label) => `Mês: ${label}`}
               contentStyle={{
+<<<<<<< HEAD
                 backgroundColor: currentTheme === 'dark' ? '#1f2937' : '#ffffff',
                 borderColor: currentTheme === 'dark' ? '#374151' : '#e5e7eb',
                 borderRadius: '0.5rem',
@@ -956,6 +1104,15 @@ const MockedChart: React.FC<MockedChartProps> = ({
               }}
               itemStyle={{ color: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937' }}
               labelStyle={{ color: currentTheme === 'dark' ? '#9ca3af' : '#6b7280' }}
+=======
+                backgroundColor: '#ffffff',
+                borderColor: '#e5e7eb',
+                borderRadius: '0.5rem',
+                padding: '0.5rem',
+              }}
+              itemStyle={{ color: '#1f2937' }}
+              labelStyle={{ color: '#6b7280' }}
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
             />
             <Bar dataKey="value" name="Porcentagem">
               {drillDownData.data.map((entry, index) => (
@@ -969,7 +1126,11 @@ const MockedChart: React.FC<MockedChartProps> = ({
             <Legend 
               wrapperStyle={{
                 paddingTop: '20px',
+<<<<<<< HEAD
                 color: currentTheme === 'dark' ? '#e5e7eb' : '#4b5563',
+=======
+                color: '#4b5563',
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
               }}
             />
           </BarChart>
@@ -980,6 +1141,7 @@ const MockedChart: React.FC<MockedChartProps> = ({
       )}
 
       {chartType === 'scatter' && (
+<<<<<<< HEAD
         <div ref={chartRef} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
           <ExportButton />
           <ComposedChart width={500} height={300} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
@@ -990,6 +1152,56 @@ const MockedChart: React.FC<MockedChartProps> = ({
             <Legend />
             <Scatter name="Datapoints" data={scatterData} fill="#E74C3C" shape="circle" />
             <Line name="Regression" data={regressionData} dataKey="y" stroke="#3498DB" dot={false} activeDot={false} strokeWidth={2} isAnimationActive={false} />
+=======
+        <div ref={chartRef} className="bg-white rounded-lg shadow-md p-4 my-2 w-full max-w-2xl mx-auto relative">
+          <ExportButton />
+          <ComposedChart width={500} height={300} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis 
+              dataKey="x" 
+              type="number" 
+              name="Eixo X"
+              tick={{ fill: '#4b5563' }}
+              axisLine={{ stroke: '#9ca3af' }}
+              tickLine={{ stroke: '#9ca3af' }}
+            />
+            <YAxis 
+              dataKey="y" 
+              type="number" 
+              name="Eixo Y"
+              tick={{ fill: '#4b5563' }}
+              axisLine={{ stroke: '#9ca3af' }}
+              tickLine={{ stroke: '#9ca3af' }}
+            />
+            <Tooltip 
+              cursor={{ strokeDasharray: '3 3', stroke: '#d1d5db' }} 
+              content={<CustomScatterTooltip />} 
+            />
+            <Legend wrapperStyle={{ color: '#4b5563' }} />
+            <Scatter 
+              name="Pontos" 
+              data={scatterData} 
+              fill="#EF4444"
+              shape="circle"
+              activeShape={{ 
+                fill: '#F87171', 
+                stroke: '#DC2626',
+                strokeWidth: 1,
+                r: 8
+              }}
+            />
+            <Line 
+              name="Linha de Regressão" 
+              data={regressionData} 
+              dataKey="y" 
+              stroke="#9ca3af" 
+              dot={false} 
+              activeDot={false} 
+              strokeWidth={2} 
+              strokeDasharray="5 5"
+              isAnimationActive={false} 
+            />
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
           </ComposedChart>
         </div>
       )}

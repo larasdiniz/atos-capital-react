@@ -58,6 +58,7 @@ export interface SidebarProps {
   activeChat: Chat | null;
   onSelectChat: (chatId: number | null) => void;
   onDeleteChat: (chatId: number) => void;
+  onAddChat?: (chat: Chat) => void;
 }
 
 export interface ChatAreaProps {

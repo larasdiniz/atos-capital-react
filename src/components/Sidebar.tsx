@@ -1,13 +1,40 @@
 import React, { useState } from 'react';
 import { SidebarProps, MenuItem, ContextMenuState, DeleteConfirmationState } from '../types';
 import { Button } from './ui/button';
-import { MessageCircle, BarChart3, Users, Settings, FileText, LogOut, Menu } from 'lucide-react';
+import { MessageCircle, Settings as SettingsIcon, FileText, LogOut, Menu, MoreVertical, Trash2, ChevronDown, User, Settings, LogOut as LogOutIcon, ArrowUpRight } from 'lucide-react';
 import ContextMenu from './ContextMenu';
 import DeleteConfirmation from './DeleteConfirmation';
+import dynamic from 'next/dynamic';
+import { useLanguage } from '../contexts/LanguageContext';
 
+<<<<<<< HEAD
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar, chats, activeChat, onSelectChat, onDeleteChat }) => {
+=======
+// Dynamically import Settings with no SSR to avoid hydration issues
+const SettingsModal = dynamic(() => import('./Settings'), { ssr: false });
+
+const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar, chats, activeChat, onSelectChat, onDeleteChat, onAddChat }) => {
+  // Estado para controlar qual chat tem o menu de opções aberto
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({ isOpen: false, x: 0, y: 0, chatId: null, chatName: '' });
   const [deleteConfirmation, setDeleteConfirmation] = useState<DeleteConfirmationState>({ isOpen: false, chatId: null, chatName: '' });
+  const [showSettings, setShowSettings] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const { t } = useLanguage();
+
+  // Apply saved theme on component mount
+  React.useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
+    const isDarkMode = savedTheme === 'dark' || 
+                     (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else if (savedTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
 
   const handleContextMenu = (e: React.MouseEvent, chatId: number, chatName: string): void => {
     e.preventDefault();
@@ -47,6 +74,39 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar, chats, acti
     setDeleteConfirmation({ isOpen: false, chatId: null, chatName: '' });
   };
 
+<<<<<<< HEAD
+=======
+  const handleLogout = (): void => {
+    // Adicione aqui a lógica de logout
+    console.log('Usuário deslogado');
+  };
+
+  // Alterna a visibilidade do menu de opções para um chat específico
+  const toggleMenu = (e: React.MouseEvent, chatId: number): void => {
+    e.stopPropagation(); // Evita que o clique propague para o item da lista
+    setOpenMenuId(openMenuId === chatId ? null : chatId);
+  };
+
+  // Fecha o menu de opções quando clicar fora dele
+  const closeMenu = (): void => {
+    setOpenMenuId(null);
+  };
+
+  // Fecha o menu quando clicar em qualquer lugar do documento
+  React.useEffect(() => {
+    const handleClickOutside = (): void => {
+      if (openMenuId !== null) {
+        setOpenMenuId(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [openMenuId]);
+
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
   const handleNewChat = (e: React.MouseEvent) => {
     e.preventDefault();
     const newChat = {
@@ -54,6 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar, chats, acti
       name: `Chat ${chats.length + 1}`,
       messages: []
     };
+<<<<<<< HEAD
     onSelectChat(newChat.id);
   };
 
@@ -96,6 +157,100 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar, chats, acti
       {/* Cabeçalho fixo */}
       <div className="p-4 border-b border-gray-200 dark:border-[#404040] flex items-center justify-between">
         {!collapsed && <h2 className="text-lg font-semibold text-black dark:text-white">Menu</h2>}
+=======
+    
+    console.log('Novo chat criado:', newChat);
+    
+    // Adiciona o novo chat à lista de chats
+    if (onAddChat) {
+      onAddChat(newChat);
+    }
+    
+    // Seleciona o novo chat
+    onSelectChat(newChat.id);
+  };
+
+  const handleNewChatClick = (e: React.MouseEvent) => {
+    console.log('Botão Novo Chat clicado');
+    e.preventDefault();
+    e.stopPropagation();
+    handleNewChat(e);
+  };
+
+  const menuItems: MenuItem[] = [
+    { 
+      icon: <MessageCircle className="w-5 h-5 dark:text-white" />, 
+      label: t('sidebar.newChat'), 
+      active: true,
+      onClick: handleNewChatClick
+    },
+    { 
+      icon: <FileText className="w-5 h-5 dark:text-white" />, 
+      label: t('sidebar.reports'), 
+      active: false 
+    }
+  ];
+
+  return (
+    <div className="flex flex-col h-full w-full bg-gray-100 dark:bg-[#1a1a1a]">
+      {/* Logo */}
+      <div className="p-4 flex justify-center">
+        {!collapsed ? (
+          <>
+            {/* Full logo for light mode */}
+            <img 
+              src={"/logo-atos.png"}
+              alt="Atos Capital" 
+              className="h-10 w-auto max-h-full dark:hidden"
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+            {/* Full logo for dark mode */}
+            <img 
+              src={"/logo-atos-dark2.png"}
+              alt="Atos Capital" 
+              className="h-10 w-auto max-h-full hidden dark:block"
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+          </>
+        ) : (
+          <>
+            {/* Collapsed logo for light mode */}
+            <img 
+              src={"/logo-atosCut.png"}
+              alt="Atos Capital" 
+              className="h-10 w-auto max-h-full dark:hidden"
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+            {/* Collapsed logo for dark mode */}
+            <img 
+              src={"/logo-atos-darkCut.png"}
+              alt="Atos Capital" 
+              className="h-10 w-auto max-h-full hidden dark:block"
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+          </>
+        )}
+        <div className="w-8 h-8 bg-gray-800 dark:bg-white rounded-full items-center justify-center" style={{display: 'none'}}>
+          <span className="text-white dark:text-atos-dark-blue font-bold text-sm">AC</span>
+        </div>
+      </div>
+      
+      {/* Cabeçalho fixo */}
+      <div className="p-4 flex items-center justify-between">
+        {!collapsed && <h2 className="text-lg font-semibold text-black dark:text-white">{t('sidebar.menu')}</h2>}
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
         <Button
           variant="ghost"
           size="icon"
@@ -106,6 +261,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar, chats, acti
         </Button>
       </div>
       
+<<<<<<< HEAD
       {/* Conteúdo principal com rolagem */}
       <div className="flex-1 flex flex-col min-h-0">
         <nav className="p-4 flex-shrink-0">
@@ -174,11 +330,156 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar, chats, acti
                   ));
                 })()}
               </div>
+=======
+      {/* Menu */}
+      <nav className="p-4 flex-shrink-0">
+        <ul className="space-y-2">
+          {menuItems.map((item, index) => (
+            <li key={index}>
+              <Button
+                variant={item.active ? "default" : "ghost"}
+                onClick={item.onClick}
+                className={`w-full justify-center ${collapsed ? 'px-0' : 'px-4 justify-start'} py-3 h-auto ${
+                  item.active 
+                    ? 'bg-[#D1D9E2] text-black hover:bg-[#D1D9E2]/90 dark:bg-atos-red dark:text-white dark:hover:bg-atos-red/90' 
+                    : ''
+                }`}
+                style={{ border: 'none', boxShadow: 'none' }}
+              >
+                <div className={`flex items-center ${!collapsed ? 'w-5 h-5 mr-4' : 'w-6 h-6'}`}>
+                  {item.icon}
+                </div>
+                {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
+              </Button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      
+      {/* Lista de conversas - Só mostra quando a barra lateral estiver aberta */}
+      {!collapsed && (
+        <div className="flex-1 overflow-y-auto px-4 pb-4">
+          <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+            {t('sidebar.chatHistory')}
+          </h3>
+          
+          {chats.length === 0 ? (
+            <div className="text-center py-4">
+              <p className="text-sm text-gray-500 dark:text-gray-400">{t('sidebar.noChats')}</p>
             </div>
+          ) : (
+            <ul className="space-y-1">
+              {chats.map((chat) => (
+                <li 
+                  key={chat.id}
+                  onContextMenu={(e) => handleContextMenu(e, chat.id, chat.name)}
+                  className={`rounded-md p-2 cursor-pointer group relative ${
+                    activeChat && activeChat.id === chat.id 
+                      ? 'bg-gray-200 dark:bg-gray-700' 
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                  onClick={() => onSelectChat(chat.id)}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span className="text-sm truncate pr-2">{chat.name}</span>
+                    
+                    {/* Botão de três pontos */}
+                    <button 
+                      className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-opacity"
+                      onClick={(e) => toggleMenu(e, chat.id)}
+                    >
+                      <MoreVertical className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                    </button>
+                    
+                    {/* Menu de opções */}
+                    {openMenuId === chat.id && (
+                      <div 
+                        className="absolute right-0 z-10 mt-1 w-32 origin-top-right rounded-md bg-gray-100 dark:bg-[#1a1a1a] shadow-lg ring-1 ring-gray-200 dark:ring-gray-700 focus:outline-none"
+                        role="menu"
+                        aria-orientation="vertical"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <div className="py-1" role="none">
+                          <button
+                            onClick={() => {
+                              handleDeleteChat(chat.id);
+                              setOpenMenuId(null);
+                            }}
+                            className="flex items-center w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-150"
+                            role="menuitem"
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            <span>Excluir</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+      
+      {/* Área do usuário fixa na parte inferior */}
+      <div className="relative p-4 bg-gray-50 dark:bg-[#181818] mt-auto">
+        <div 
+          className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} cursor-pointer`}
+          onClick={() => setShowUserMenu(!showUserMenu)}
+        >
+          <div className="flex items-center">
+            <div className="w-8 h-8 bg-gray-400 dark:bg-atos-red rounded-full flex items-center justify-center flex-shrink-0">
+              <User className="w-4 h-4 text-white" />
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
+            </div>
+            {!collapsed && (
+              <div className="min-w-0 ml-3">
+                <p className="font-medium text-black dark:text-white truncate">{t('sidebar.user')}</p>
+              </div>
+            )}
+          </div>
+          {!collapsed && (
+            <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${showUserMenu ? 'transform rotate-180' : ''}`} />
+          )}
+        </div>
+
+        {/* Dropdown do usuário */}
+        {showUserMenu && (
+          <div className={`absolute bottom-full mb-2 bg-white dark:bg-[#1a1a1a] rounded-md shadow-lg z-50 overflow-hidden whitespace-nowrap ${
+            collapsed ? 'left-0' : 'left-0 right-0 mx-4'
+          }`}>
+            <a
+              href="https://site.atoscapital.com.br/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <ArrowUpRight className="w-4 h-4 mr-4" />
+              Fazer Upgrade
+            </a>
+            <button
+              onClick={() => {
+                setShowSettings(true);
+                setShowUserMenu(false);
+              }}
+              className="w-full flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <Settings className="w-4 h-4 mr-4" />
+              Configurações
+            </button>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <LogOutIcon className="w-4 h-4 mr-4" />
+              Sair da Conta
+            </button>
           </div>
         )}
       </div>
       
+<<<<<<< HEAD
       {/* Área do usuário fixa na parte inferior */}
       {!collapsed && (
         <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0 bg-gray-100 dark:bg-[#181818]">
@@ -194,10 +495,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar, chats, acti
         </div>
       )}
 
+=======
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
       {/* Context Menu */}
       {contextMenu.isOpen && (
         <div 
-          className="fixed z-50 bg-white dark:bg-gray-800 shadow-lg rounded-md py-1 w-48"
+          className="fixed bg-white dark:bg-gray-800 shadow-lg rounded-md py-1 z-50"
           style={{
             top: `${contextMenu.y}px`,
             left: `${contextMenu.x}px`,
@@ -213,11 +516,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar, chats, acti
             }}
             className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            Excluir conversa
+            {t('sidebar.deleteChat')}
           </button>
         </div>
       )}
-
+      
       {/* Delete Confirmation Modal */}
       <DeleteConfirmation
         isOpen={deleteConfirmation.isOpen}
@@ -225,8 +528,10 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar, chats, acti
         onConfirm={confirmDelete}
         chatName={deleteConfirmation.chatName}
       />
+      
+      {/* Settings Modal */}
+      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
     </div>
   );
 };
-
 export default Sidebar;

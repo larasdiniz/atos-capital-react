@@ -1,6 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
+=======
+import { LanguageProvider } from './contexts/LanguageContext';
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
 
 // Desabilita o Service Worker em desenvolvimento
 if (process.env.NODE_ENV === 'development' && 'serviceWorker' in navigator) {
@@ -12,11 +16,13 @@ if (process.env.NODE_ENV === 'development' && 'serviceWorker' in navigator) {
     });
   });
 }
+<<<<<<< HEAD
 import Header from './components/Header';
+=======
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
 import Sidebar from './components/Sidebar';
 import ChatArea from './components/ChatArea';
 import MessageInput from './components/MessageInput';
-import Footer from './components/Footer';
 import { Message, Chat } from './types';
 
 // Função para criar um novo chat vazio
@@ -203,6 +209,7 @@ function App(): JSX.Element {
       
       return updatedChats;
     });
+<<<<<<< HEAD
   };
 
   return (
@@ -266,6 +273,72 @@ function App(): JSX.Element {
         </div>
       </div>
     </div>
+=======
+  };
+
+  const handleAddChat = (newChat: Chat): void => {
+    console.log('handleAddChat chamado com:', newChat);
+    setChats(prevChats => {
+      console.log('Chats antes da adição:', prevChats);
+      const updatedChats = [...prevChats, newChat];
+      console.log('Chats após a adição:', updatedChats);
+      return updatedChats;
+    });
+    console.log('Definindo chat ativo para:', newChat.id);
+    setActiveChatId(newChat.id);
+  };
+
+  return (
+    <LanguageProvider>
+      <div className={`flex h-screen ${darkMode ? 'dark' : ''}`}>
+        {/* Conteúdo Principal */}
+        <div className="flex flex-1 overflow-hidden h-full">
+          {/* Sidebar */}
+          <div 
+            className={`fixed left-0 top-0 bottom-0 ${sidebarCollapsed ? 'w-20' : 'w-64'} transition-all duration-300 ease-in-out bg-white dark:bg-[#1a1a1a] z-10`}
+            style={{ height: '100vh' }}
+          >
+            <Sidebar 
+              darkMode={darkMode}
+              collapsed={sidebarCollapsed} 
+              toggleSidebar={toggleSidebar}
+              chats={chats}
+              activeChat={activeChat}
+              onSelectChat={selectChat}
+              onDeleteChat={handleDeleteChat}
+              onAddChat={handleAddChat}
+            />
+          </div>
+
+          {/* Área de Chat */}
+          <div 
+            className={`flex-1 flex flex-col min-w-0 bg-gray-50 dark:bg-[#212121] ml-0 ${sidebarCollapsed ? 'md:ml-20' : 'md:ml-52'} transition-all duration-300 ease-in-out`}
+            style={{ height: '100vh' }}
+          >
+            {/* Área de mensagens com rolagem */}
+            <div className="flex-1 overflow-y-auto w-full bg-gray-50 dark:bg-[#212121]">
+              <div className="w-full max-w-4xl mx-auto px-4 py-4">
+                <ChatArea 
+                  messages={messages} 
+                  darkMode={darkMode} 
+                />
+              </div>
+            </div>
+            
+            {/* Input de mensagem fixo na parte inferior */}
+            <div className="w-full bg-gray-50 dark:bg-[#212121]">
+              <div className="max-w-4xl mx-auto px-4 py-3">
+                <MessageInput 
+                  onSendMessage={handleSendMessage} 
+                  darkMode={darkMode} 
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </LanguageProvider>
+>>>>>>> 6ef53d9 (Tela de Configuração e melhoria no layout)
   );
 }
 
